@@ -19,6 +19,9 @@
  **/
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "filetreemodel.h"
+
+#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -30,4 +33,14 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::on_actionOpen_Folder_triggered()
+{
+    QFileDialog opts;
+    QString fn = QFileDialog::getExistingDirectory(this, tr("Open Folder"), tr("~"));
+    QFile *rootFile = new QFile(fn);
+    FileTreeModel *model = new FileTreeModel(rootFile, Search, ui->searchTree);
+    model->update();
+    ui->searchTree->setModel(model);
 }
